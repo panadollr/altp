@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai là triệu phú</title>
+</head>
+<body style="overflow: hidden;;background: url('image/background.jpg');background-size: contain;background-position: 15px;">
+     
+    <div class="ui two column stackable grid" style="height: 100%" id="game_main">
+          <div class="column" style="width: 75%;padding: 20px" id="question_main">
+           <div style="height: 40%;">
+            <div class="ui white circular massive label countdown" style="font-size: 30px;"></div>
+            <div class="ui blue large label" id="user_name">
+            </div>
+            <button class="ui tiny red button" id="signOutBtn">Thoát trò chơi</button>
+        </div>
+           <div style="height: 60%;margin-top: 20px;">
+            <center>
+                <div class="ui label question" style="font-size: 35px;width: 100%;color:white;border-radius: 20px;display:none"></div>
+                <div class="ui horizontal selection choices list" style="margin-top: 30px;display:none">
+                    <div class="item">
+                        <div class="ui circular label choice" data-id="1" style="font-size: 25px;width: 450px;"></div>
+                    </div>
+                    <div class="item">
+                        <div class="ui circular label choice" data-id="2" style="font-size: 25px;width: 450px;"></div>
+                    </div>
+                  </div>
+
+                  <div class="ui horizontal selection choices list" style="margin-top: 10px;display:none">
+                    <div class="item">
+                        <div class="ui circular label choice " data-id="3" style="font-size: 25px;width: 450px;"></div>
+                    </div>
+                    <div class="item">
+                        <div class="ui circular label choice" data-id="4" style="font-size: 25px;width: 450px;"></div>
+                    </div>
+                  </div>
+
+            </center>
+        </div>
+          </div>
+
+          <div class="column" style="width: 25%;background: black;padding:0" id="money_main">
+            <center>
+                <div class="ui massive selection horizontal helps list" style="margin-top: 10px;">
+                    <div class="item">
+                      <img class="ui avatar image help" src="image/50-50.png">
+                    </div>
+                    <div class="item">
+                      <img class="ui avatar image help" src="image/call.png">
+                    </div>
+                    <div class="item">
+                      <img class="ui avatar image help" src="image/audience.png">
+                    </div>
+                    <div class="item">
+                      <img style="display: none;" class="ui avatar image help" src="image/call-pro.png">
+                    </div>
+                  </div>
+            <div class="ui inverted celled list" style="margin-top: -25px;color:#a5673f;font-size: 26px;font-weight: bold;">
+              <div class="item special money"> 12) 1,000,000 $</div>
+                <div class="item money"> 11) 500,000 $</div>
+              <div class="item special money"> 10) 250,000 $</div>
+                <div class="item money"> 09) 125,000 $</div>  
+              <div class="item money"> 08) 64,000 $</div>
+                <div class="item money"> 07) 32,000 $</div>
+                <div class="item money"> 06) 16,000 $</div>
+                <div class="item special money"> 05) 8,000 $</div>
+                <div class="item money"> 04) 4,000 $</div>
+                <div class="item money"> 03) 2,000 $</div>
+                <div class="item money"> 02) 1,000 $</div>
+                <div class="active item money">01) 500 $</div>
+              </div>
+            </center>
+          </div>
+        </div>
+
+
+        <div class="ui small modal" style="padding: 10px;"></div>
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+
+<script src="libary/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="libary/semantic.min.css">
+<script src="libary/semantic.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script src="https://cdn.lordicon.com/pzdvqjsp.js"></script>
+
+<script src="js/firebase_db.js"></script>
+      <script src="js/home.js"></script>
+
+
+<style>
+        .help{
+        transition: 0.2s;
+        
+    }
+        .money.active{
+            background-color: #a5673f;
+            color:white
+        }
+        .special.money{
+          color:white
+        }
+        .help:hover{
+            transform: scale(1.15);
+        }
+        .choice:hover{
+          transform: scale(1.05);
+          transition: 0.2s;
+        }
+    </style>
+
+</html>

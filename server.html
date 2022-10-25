@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server</title>
+</head>
+<body class="ui center aligned container" style="overflow: hidden;">
+  <div class="ui toggle disabled big checkbox" style="margin-top: 20px;padding: 15px;border-radius: 20px;">
+    <input type="checkbox" name="public">
+    <label>Trạng thái server <span></span></label>
+  </div>
+     <h1 class="ui header" style="margin-top: 10px;text-transform: uppercase;">Danh sách người chơi ai là triệu phú</h1>
+  <table class="ui celled table" id="user_table">
+    <thead>
+      <tr><th>Tên người chơi</th>
+      <th>Điểm</th>
+      <th>Tùy chọn</th>
+    </tr></thead>
+    <tbody>
+    
+    </tbody>
+  </table>
+  
+        <div class="ui modal">
+          <i class="close icon"></i>
+          <h1 class="ui center aligned header">
+          </h1>
+        </div>
+
+
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+
+<script src="libary/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="libary/semantic.min.css">
+<script src="libary/semantic.min.js"></script>
+
+<script src="js/firebase_db.js"></script>
+      <script src="js/server.js"></script>
+
+
+</html>

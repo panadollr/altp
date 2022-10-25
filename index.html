@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai là triệu phú</title>
+</head>
+<body style="overflow: hidden;;background: url('https://cdn-www.bluestacks.com/bs-images/bg-top8.png');background-position: center;">
+
+  <div class="ui container" style="width: 30%;background: #e0e1e2 none;padding: 20px;transform: translateY(50%);">
+  <form action="home.html" class="ui form" id="loginForm">
+    <h1 class="ui center aligned header">Đăng nhập</h1>
+    <div class="field">
+      <label>Tên người chơi</label>
+      <input type="text" id="loginName" required>
+    </div>
+    <center>
+    <button class="ui blue button" type="submit">Đăng nhập</button><br><br>
+    <span>Chưa có tài khoản <a id="registerBtn" class="ui green button">Đăng ký</a></span>
+  </center>
+  </form>
+
+  <form class="ui form" id="registerForm" style="display: none;">
+    <h1 class="ui center aligned header">Đăng ký</h1>
+    <div class="field">
+      <label>Tên người chơi</label>
+      <input type="text" name="name" id="registerName" required>
+    </div>
+    <center>
+    <button class="ui green button" type="submit">Đăng ký</button><br><br>
+    <span>Chưa có tài khoản <a id="loginBtn" class="ui blue button">Đăng nhập</a></span>
+  </center>
+  </form>
+
+</div>
+    
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+
+<script src="libary/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="libary/semantic.min.css">
+<script src="libary/semantic.min.js"></script>
+
+<script src="js/firebase_db.js"></script>
+      <script src="js/authentication.js"></script>
+
+</html>

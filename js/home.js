@@ -7,6 +7,7 @@ var letsPlayQuesSound= new Audio("music/Let's Play Question.mp3")
 var finalAnswerSound= new Audio("music/Final Answer.mp3")
 var quesSound= new Audio("music/background_sound.mp3")
 var loseSound=new Audio("music/Lose.mp3");
+var five_last_second_sound=new Audio('music/5lastsecond.mp3');
 let questionNumber=1;
 var winMoney;
 let correctAnswer;
@@ -33,17 +34,19 @@ const random_number_array=question_number_array.sort(() => Math.random() - Math.
 //KIEM TRA SESSION NGUOI CHOI
 if(currentUser){
     getUser()
-    progressAlert('<h1 class="ui center aligned header">Đang tải tải dữ liệu...</h1>',false,'error')
-    questionsRef.get().then((snapshot)=>{
-        snapshot.val().forEach(te=>{
-            questionArray.push(te)
-        })
-        loadQuestion(questionNumber)
-    }).catch(()=>{
-        errorAlert('Lỗi khi tải dữ liệu...',true,'error')
+    progressAlert('<h1 class="ui center aligned header">Đang tải tải dữ liệu...</h1>',false,null)
+    /* kiểm tra mảng câu hỏi đã load về từ firebase */
+  questionsRef.on('value',(snapshot)=>{
+    snapshot.val().forEach(te=>{
+        questionArray.push(te)
     })
-    //KIEM TRA TRANG THAI SERVER
+        loadQuestion(questionNumber)
+})
+
+
 serverRef.on('value',(el)=>{
+
+    /* kiểm tra trạng thái server */
     if(!el.val().active){
         errorAlert('Server đã tắt, vui lòng vào game trong thời gian khác',true,'error')  
     }else{
@@ -62,8 +65,8 @@ function countDown(second){
     paused_second=second
 $('.countdown').text((second)).transition('pulse')
 if(second==5){
-    quesSound.pause()
-new Audio('music/5lastsecond.mp3').play()
+    five_last_second_sound.play()
+   quesSound.ended 
 }
 else if(second==0){
     clearInterval(secondInterval)
@@ -102,8 +105,7 @@ function errorAlert(message,status,status_name){
             },
           }).modal('show')   
           $('#game_main').fadeOut()
-          //countDown(null,true)
-          clearInterval(secondInterval)
+        clearInterval(secondInterval)
     }else{
         $('.ui.modal').modal({
             onHide :()=>{
@@ -184,43 +186,63 @@ signOutBtn.onclick=()=>{
         location.href="index.html"
     }
 }
-//
+
+/*VÔ HIỆU HÓA HOẶC TẤT CẢ*/
+function allComponents(isEnabled){
+    if(!isEnabled){
+            $('.choices').css('pointer-events','none')
+    $('.helps').css('pointer-events','none').css('opacity', '0.4')
+    clearInterval(secondInterval)
+    five_last_second_sound.pause()
+    }else{
+        $('.helps').css('pointer-events','visible').css('opacity', '1')
+        $('.choices').css('pointer-events','visible')
+    }
+}
+
 
 //LOAD TỪNG CÂU HỎI
 function loadQuestion(question_number){
     let random_unique_question_number=random_number_array[question_number-1]
-   letsPlayQuesSound.play()
-   letsPlayQuesSound.onended=function(){
-    quesSound.play()
-   quesSound.loop=true
-   }
-   letsPlayQuesSound.onplay=()=>{
-    $('.question').transition({
-        animation : 'fade down',
-        onComplete : function() {
-            $('.choices').transition({
-                animation : 'fly up',
-                interval  : 300,
-                duration:800
-              }) 
-              clearInterval(secondInterval)
-              countDown(31)
-              $('.helps').css('pointer-events','visible').css('opacity', '1')
-          }
-      })
-   }
 
-    $('.choice').removeClass('disabled').css('pointer-events','visible')
+   allComponents(false)
+    $('.question').css('font-size','60px')
+    $('.choice').removeClass('disabled')
     .css('background','linear-gradient(to right, rgb(5, 117, 230), rgb(2, 27, 121))')
     .css('border','4px solid #a5673f').css('color','white')
 
-    $('.question')
-    .css('background','linear-gradient(to right, rgb(5, 117, 230), rgb(2, 27, 121))').transition('hide');
-    $('.choices').css('pointer-events','visible').transition('hide')
-    setTimeout(()=>{
-
-    },500)
-   
+    $('.question').css('background','linear-gradient(to right, rgb(5, 117, 230), rgb(2, 27, 121))')
+    
+    $('.question').transition({
+        animation : 'fly down',
+        duration:2000,
+        onStart:function(){
+            letsPlayQuesSound.play()
+        },
+        onComplete:function(){
+            letsPlayQuesSound.ended
+            letsPlayQuesSound.onended=()=>{
+                 quesSound.loop=true
+                 quesSound.play()
+                 
+                 $('.question').animate({'font-size':'40px'},{
+                    duration:400,
+                    start:function(){
+                        countDown(31)
+                        $('.choices').transition({
+                    animation : 'fly up',
+                    interval  : 300,
+                    duration:800,
+                    onComplete:function(){
+                       allComponents(true)
+                    }
+                  }) 
+                    }
+                })
+            }
+        }
+      })
+  
    const questionContent=questionArray[random_unique_question_number];
     $('.question').text(questionContent.content)
     $('.choice:eq(0)').text(questionContent.answer1)
@@ -236,47 +258,53 @@ function loadQuestion(question_number){
 
 //NÚT CHỌN ĐÁP ÁN
 $('.choice').click(function(){
-    $('.choices').css('pointer-events','none')
-    $('.helps').css('pointer-events','none').css('opacity', '0.4');
+
     const choiceId=$(this).data('id');
+    allComponents(false)
     $(this).css('background','#a5673f').css('border','4px solid white')
     finalAnswerSound.play()
-    finalAnswerSound.onplay=()=>{
-        quesSound.pause()
-        clearInterval(secondInterval)
-    }
+    quesSound.pause()
     finalAnswerSound.onended=()=>{
     if(choiceId==correctAnswer){
        winMoney=$('.active.item.money').text().slice(4)
         var winSound= new Audio("music/Win.mp3");
         winSound.play()
-        winSound.onplay=()=>{
-            clearInterval(secondInterval)
-        }
         updateUser(winMoney)
          $(this).css('background','#21ba45')
-         winSound.onended=()=>{
-            $('.question').text(winMoney).css('background','#21ba45')
-            .transition('bounce','800ms')
-            $('.choices').transition('hide')
 
-            setTimeout(()=>{
-                let text = "<h1 class='ui header'>"
-                if(questionNumber==2 || questionNumber==10){
-                text += "Bạn đã vượt qua cột mốc câu hỏi số "+questionNumber
-                +", số tiền thưởng đang có là "+winMoney+". Bạn đã sẵn sàng tiếp\
-                 tục với câu hỏi số "+(questionNumber+1)+" chưa ?";
-               progressAlert(text,true,'special_question')
-            }else if(questionNumber==12){
-               text+="Xin chúc mừng bạn đã chiến thắng chương trình, số tiền thưởng nhận được là "+winMoney+" "
-              new Audio('music/winner_sound.mp3').play()
-               progressAlert(text,true,'special_question_stop')
-            }else{
-                questionNumber+=1;
-                loadQuestion(questionNumber)
-            }
-            text+='</h1>'
-             },1000)
+         winSound.onended=()=>{
+            $('.choices').transition('hide')
+            $('.question').text(winMoney).css('background','#21ba45')
+            .animate({'font-size':'60px'},{
+                duration:400,
+                start:function(){
+                    allComponents(false)
+                },
+                complete:function(){
+                    $(this).transition({
+                        animation:'fly up',
+                        duration:1000,
+                    onComplete:function(){
+
+                        let text = "<h1 class='ui header'>"
+                        if(questionNumber==5 || questionNumber==10){
+                        text += "Bạn đã vượt qua cột mốc câu hỏi số "+questionNumber
+                        +", số tiền thưởng đang có là "+winMoney+". Bạn đã sẵn sàng tiếp\
+                         tục với câu hỏi số "+(questionNumber+1)+" chưa ?";
+                       progressAlert(text,true,'special_question')
+                    }else if(questionNumber==12){
+                       text+="Xin chúc mừng bạn đã chiến thắng chương trình, số tiền thưởng nhận được là "+winMoney+" "
+                      new Audio('music/winner_sound.mp3').play()
+                       progressAlert(text,true,'special_question_stop')
+                    }else{
+                        questionNumber+=1;
+                        loadQuestion(questionNumber)
+                    }
+                    text+='</h1>'
+
+                    }})
+                }
+            })
          }
     }else{
             loseSound.play()

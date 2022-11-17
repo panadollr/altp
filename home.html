@@ -11,7 +11,7 @@
     <div class="ui two column stackable grid" style="height: 100%" id="game_main">
           <div class="column" style="width: 75%;padding: 20px" id="question_main">
            <div style="height: 40%;">
-            <div class="ui white circular massive label countdown" style="font-size: 30px;"></div>
+            <div class="ui white circular massive label countdown" style="font-size: 30px;display: none;"></div>
             <div class="ui blue large label" id="user_name">
             </div>
             <button class="ui tiny red button" id="signOutBtn">Thoát trò chơi</button>
@@ -19,6 +19,7 @@
            <div style="height: 60%;margin-top: 20px;">
             <center>
                 <div class="ui label question" style="width: 100%;color:white;border-radius: 20px;display:none"></div>
+               
                 <div class="ui horizontal selection choices list" style="margin-top: 30px;display:none;">
                     <div class="item">
                         <div class="ui circular label choice" data-id="1" style="font-size: 25px;width: 450px;"></div>
@@ -109,7 +110,7 @@
             transform: scale(1.15);
         }
         .choice:hover{
-          transform: scale(1.04);
+          transform: scale(1.04);  transition: 0.5s linear;
         }
     </style>
 

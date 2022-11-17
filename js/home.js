@@ -111,7 +111,7 @@ function errorAlert(message,status,status_name){
             onHide :()=>{
                 $('#game_main').fadeIn();
                 if(paused_second){
-                    countDown(paused_second)  
+                    //countDown(paused_second)  
                 }
             },}).modal('hide')
     }
@@ -123,14 +123,15 @@ function progressAlert(message,action,status_name){
     $('.ui.modal').html(message) .modal({
         closable  : false,
       }).modal('show')
-      clearInterval(secondInterval)
+      //clearInterval(secondInterval)
+      allComponents(false)
     if(action){
 
         $('.ui.modal').append('<center style="padding:10px"><button class="ui continue green button">Tiếp tục</button></center>')
         $('.continue.button').click(function(){
                 $('.ui.modal').modal('hide')
-                countDown(paused_second)
-                quesSound.play()
+                //countDown(paused_second)
+                allComponents(true)
         })
 
         if(status_name=='special_question'){
@@ -144,6 +145,7 @@ function progressAlert(message,action,status_name){
                 if(questionNumber==5){
                     progressAlert('<h2 class="ui header">Bạn được nhận thêm 1 quyền trợ giúp là\
                     "Hỏi ý kiến nhà thông thái"</h2>',true,'special_question_gift')
+                    allComponents(false)
                 }else{
                     questionNumber+=1;
                     loadQuestion(questionNumber)
@@ -153,9 +155,13 @@ function progressAlert(message,action,status_name){
         
     $('.ui.modal').modal({
         onHide :()=>{
-            if(status_name=='special_question_stop'){
+            if(status_name=='normal_question'){
+                quesSound.play()
+            }
+            else if(status_name=='special_question_stop'){
             location.href="index.html" 
-        }else if(status_name=='special_question_gift'){
+        }
+        else if(status_name=='special_question_gift'){
             $('.help:eq(3)').transition('fade left')
             questionNumber+=1;
             loadQuestion(questionNumber)
@@ -190,13 +196,14 @@ signOutBtn.onclick=()=>{
 /*VÔ HIỆU HÓA HOẶC TẤT CẢ*/
 function allComponents(isEnabled){
     if(!isEnabled){
-            $('.choices').css('pointer-events','none')
+            $('.choice').css('pointer-events','none')
     $('.helps').css('pointer-events','none').css('opacity', '0.4')
     clearInterval(secondInterval)
     five_last_second_sound.pause()
+    quesSound.pause()
     }else{
         $('.helps').css('pointer-events','visible').css('opacity', '1')
-        $('.choices').css('pointer-events','visible')
+        $('.choice').css('pointer-events','visible')
     }
 }
 
@@ -204,9 +211,8 @@ function allComponents(isEnabled){
 //LOAD TỪNG CÂU HỎI
 function loadQuestion(question_number){
     let random_unique_question_number=random_number_array[question_number-1]
-
-   allComponents(false)
     $('.question').css('font-size','60px')
+    allComponents(false)
     $('.choice').removeClass('disabled')
     .css('background','linear-gradient(to right, rgb(5, 117, 230), rgb(2, 27, 121))')
     .css('border','4px solid #a5673f').css('color','white')
@@ -226,9 +232,9 @@ function loadQuestion(question_number){
                  quesSound.play()
                  
                  $('.question').animate({'font-size':'40px'},{
-                    duration:400,
+                    duration:300,
                     start:function(){
-                        countDown(31)
+                        //countDown(31)
                         $('.choices').transition({
                     animation : 'fly up',
                     interval  : 300,
@@ -263,7 +269,7 @@ $('.choice').click(function(){
     allComponents(false)
     $(this).css('background','#a5673f').css('border','4px solid white')
     finalAnswerSound.play()
-    quesSound.pause()
+    //quesSound.pause()
     finalAnswerSound.onended=()=>{
     if(choiceId==correctAnswer){
        winMoney=$('.active.item.money').text().slice(4)
@@ -271,14 +277,17 @@ $('.choice').click(function(){
         winSound.play()
         updateUser(winMoney)
          $(this).css('background','#21ba45')
-
+winSound.onplay=()=>{
+    allComponents(false)
+}
          winSound.onended=()=>{
             $('.choices').transition('hide')
             $('.question').text(winMoney).css('background','#21ba45')
             .animate({'font-size':'60px'},{
-                duration:400,
+                duration:300,
                 start:function(){
                     allComponents(false)
+                    //countDown(31)
                 },
                 complete:function(){
                     $(this).transition({
@@ -313,12 +322,12 @@ $('.choice').click(function(){
             clearInterval(secondInterval)
              $(this).css('background','#db2828')
             }
-           
+
             loseSound.onended=()=>{
                 if(questionNumber>=5){
                     errorAlert('Bạn sẽ ra về với phần thưởng là '+$('.active.money').text().slice(3),true,'failed')
                 }else{
-                     errorAlert('Bạn đã trả lời sai, chơi lại thôi nào',false,'failed')
+                     errorAlert('Bạn đã trả lời sai, chơi lại thôi nào',true,'failed')
                 }
              }
            
@@ -338,8 +347,8 @@ function updateUser(score){
 //NÚT TRỢ GIÚP
  $('.help').click(function(){
     $(this).addClass('disabled').css('pointer-events','none')
-    clearInterval(secondInterval)
-    quesSound.pause()
+    //clearInterval(secondInterval)
+    //quesSound.pause()
  })
 
  //NÚT TRỢ GIÚP 50/50
@@ -354,30 +363,24 @@ function updateUser(score){
     arr.slice(1).forEach(element=>{
         $('.choice:eq('+element+')').addClass('disabled').css('pointer-events','none')
     })
-    countDown(paused_second)
-    quesSound.play()
+    //countDown(paused_second)
+    //quesSound.play()
     })
 
      //NÚT TRỢ GIÚP GỌI ĐIỆN NGƯỜI THÂN
     $('.help:eq(1)').click(function(){
         const phoneAFriendSound=new Audio('music/Phone-A-Friend.mp3')
         phoneAFriendSound.play()
-        progressAlert('<center>\
-        <lord-icon\
-            src="https://cdn.lordicon.com/fwafvpnq.json"\
-            trigger="loop"\
-            colors="primary:#121331,secondary:#3080e8"\
-            style="width:250px;height:250px">\
-        </lord-icon></center><h1 class="ui center aligned header"\
+        progressAlert('<h1 class="ui center aligned header"\
          style="color:white;background: rgb(33, 133, 208);">Đang gọi\
-          cho người thân, vui lòng đợi...</h1>',false,null)
+          cho người thân, vui lòng đợi...</h1>',false,'normal_question')
         phoneAFriendSound.onended=()=>{
              for(let i=0;i<4;i++){
             if($('.choice:eq('+i+')').data('id')==correctAnswer){
              progressAlert('<h1 class="ui center aligned header"\
               style="color:white;background: rgb(33, 133, 208);">Tôi xin\
                trợ giúp cho người chơi là đáp án: '+$('.choice:eq('+i+')').text()+'</h1>'
-               ,true,null)
+               ,true,'normal_question')
             }
         }
         }
@@ -394,7 +397,7 @@ function updateUser(score){
          đáp án, vui lòng đợi...</h1>',false,null)
             askTheAudienceAudio.onended=()=>{
              let html=`<center style="padding:40px"><canvas id="myChart" style="transform:scale(1.1);width:100%;max-width:600px;"></canvas></center>`
-             progressAlert(html,true,null)
+             progressAlert(html,true,'normal_question')
              var yValues = [25, 25, 45, 25];
              var xValues=[]
              var barColors = [
@@ -437,7 +440,7 @@ function updateUser(score){
         pickExpertSound.play()
         const experts=[{name:'Ronaldo',image:'image/ronaldo.jpg'},
         {name:'Albert Einstein',image:'https://sohanews.sohacdn.com/160588918557773824/2022/1/16/albert-einstein-16423329346181127465252.jpg'},
-        {name:'Linh Lor',image:'https://yt3.ggpht.com/80to5U1waPT9uzJNGrDPmjL4zh3HPMdqCkFA3VXe9tr3fwkjqLoF_AzHdGO175YLwHAhmBvgyQ=s900-c-k-c0x00ffffff-no-rj'}]
+        {name:'Đàm Vĩnh Hưng',image:'https://nld.mediacdn.vn/2021/1/29/dam-vinh-hung-xuc-dong-ke-ve-moi-tinh-dau-voi-ban-gai-da-mat-1571402980017846693901-16118908461411753056708.jpg'}]
         let html=`<h1 class="ui center aligned header" style="color:white;background: rgb(33, 133, 208);">Vui lòng chọn nhà thông thái phù hợp</h1>\
         <div class="ui link three doubling cards" style="padding:20px">`
  for(let i=0;i<experts.length;i++){
@@ -477,7 +480,7 @@ function updateUser(score){
             </center><h1 class="ui center aligned header"\
              style="color:white;background: rgb(33, 133, 208);">\
              Tôi xin trợ giúp cho người chơi là đáp án: '+$('.choice:eq('+i+')').text()+'</h1>\
-             ',true,null)
+             ',true,'normal_question')
            }
        }
        }

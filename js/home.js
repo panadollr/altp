@@ -15,12 +15,7 @@ var secondInterval;
 let paused_second;
 var serverRef = getDB.ref('server');
 const questionArray=[]
-
-const question_number_array=[]
-for(let i=0;i<12;i++){
-    question_number_array.push(i)
-}
-const random_number_array=question_number_array.sort(() => Math.random() - Math.random()).slice(0, 12)
+const random_number_array=[]
 
 /*getDB.ref("questions/"+"6").set({
     content:'Người khai sinh ra chữ quốc ngữ Việt Nam có quốc tịch ở đâu ?',
@@ -40,6 +35,12 @@ if(currentUser){
     snapshot.val().forEach(te=>{
         questionArray.push(te)
     })
+    for(let i=0;i<12;i++){
+        random_number_array.push(i)
+    }
+    if(random_number_array.length==12){
+        random_number_array.sort(() => Math.random() - Math.random()).slice(0, 12)
+    }
         loadQuestion(questionNumber)
 })
 
@@ -275,7 +276,7 @@ $('.choice').click(function(){
        winMoney=$('.active.item.money').text().slice(4)
         var winSound= new Audio("music/Win.mp3");
         winSound.play()
-        updateUser(winMoney)
+        updateUser(questionNumber)
          $(this).css('background','#21ba45')
 winSound.onplay=()=>{
     allComponents(false)

@@ -4,18 +4,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server</title>
-</head>
+    <title>Ai là triệu phú (Server)</title>
+    <script src="libary/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.0/dist/semantic.min.css">
+    <script src="libary/semantic.min.js"></script>
+  </head>
 <body class="ui center aligned container" style="overflow: hidden;">
   <div class="ui toggle disabled big checkbox" style="margin-top: 20px;padding: 15px;border-radius: 20px;">
     <input type="checkbox" name="public">
     <label>Trạng thái server <span></span></label>
   </div>
-     <h1 class="ui header" style="margin-top: 10px;text-transform: uppercase;">Danh sách người chơi ai là triệu phú</h1>
-  <table class="ui celled table" id="user_table">
+     <h1 class="ui header" style="margin-top: 10px;text-transform: uppercase;">Danh sách tài khoản</h1>
+  <table class="ui celled blue table" id="user_table">
     <thead>
-      <tr><th>Tên người chơi</th>
-      <th>Điểm</th>
+      <tr>
+        <th>Thứ hạng</th>
+        <th>Tên tài khoản</th>
+      <th>Số câu đúng trong lần chơi gần nhất</th>
       <th>Tùy chọn</th>
     </tr></thead>
     <tbody>
@@ -35,10 +40,6 @@
 <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
-
-<script src="libary/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="libary/semantic.min.css">
-<script src="libary/semantic.min.js"></script>
 
 <script src="js/firebase_db.js"></script>
       <script src="js/server.js"></script>

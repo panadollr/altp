@@ -3,36 +3,67 @@ var usersRef = getDB.ref('users');
 var serverRef = getDB.ref('server');
 const userTable = document.getElementById('user_table');
 
-
 const loadUserList=()=>{
-    usersRef.orderByChild('score').on('value',function(snapshot){
-        let user=``
-snapshot.forEach(element=>{
-    user+=` <tr>
-    <td>${element.val().name}</td>
-    <td>${element.val().score}</td>
-    <td><button data-permission="${element.val().permission}" data-name="${element.val().name}" `
-    if(element.val().permission==1){
-        user+=`class="ui button red ban">Khóa tài khoản`
-    }else{
-        user+=`class="ui button green ban">Mở khóa tài khoản`
-    }
-   user+= `</button></td></tr>`
-})      
-$('#user_table tbody').html(user)
-$('#user_table tbody .ban').click(function(){
-    const userRefByName= getDB.ref('users/'+$(this).data('name'))
-    if($(this).data('permission')==1){
-        userRefByName.update({
-            permission:0  
-          })
-    }else{
-        userRefByName.update({
-            permission:1  
-          })
-    }
-})
+
+    usersRef.on('value',(snapshot)=>{
+    const userArr=[]
+    snapshot.forEach(el=>{
+        userArr.push(el.val())
     })
+        userArr.sort((a, b) => {
+            let idA=a.score
+            let idB=b.score
+             return idA==idB ? 0 : idA < idB ? 1 : -1;
+          });
+
+          let order=0;
+          let user=``
+          userArr.forEach(element=>{
+              user+=` <tr>
+              <td>${order+=1}`
+              if(order==1){
+user+=`<i class="fire alternate red large icon"></i>`
+              }else if(order==2){
+                user+=`<i class="fire alternate orange large icon"></i>`
+              }else if(order==3){
+                user+=`<i class="fire alternate green large icon"></i>`
+              }
+             user+=`</td>
+              <td>${element.name}</td>
+              <td>${element.score}/12</td>
+              <td><button data-permission="${element.permission}" data-name="${element.name}" `
+              if(element.permission==1){
+                  user+=`class="ui button orange ban">Khóa`
+              }else{
+                  user+=`class="ui button green ban">Mở khóa`
+              }
+             user+= `</button><button data-name="${element.name}" class="ui red delete button">Xóa</button></td>
+             </tr>`
+          })      
+          $('#user_table tbody').html(user)
+          $('#user_table tbody .ban').click(function(){
+              const userRefByName= getDB.ref('users/'+$(this).data('name'))
+              if($(this).data('permission')==1){
+                  userRefByName.update({
+                      permission:0  
+                    })
+              }else{
+                  userRefByName.update({
+                      permission:1  
+                    })
+              }
+          })
+          
+          $('#user_table tbody .delete').click(function(){
+              var user_name=$(this).data('name');
+              let text = "Bạn chắc chắn muốn xóa tài khoản "+user_name+" ?";
+              if (confirm(text) == true) {
+                  getDB.ref('users/'+user_name).remove()
+              }
+          })
+
+    })
+
 }
 
 loadUserList()

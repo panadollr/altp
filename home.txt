@@ -8,14 +8,6 @@ var finalAnswerSound= new Audio("music/Final Answer.aac")
 var quesSound= new Audio("music/background_sound.aac")
 var loseSound=new Audio("music/Lose.aac");
 var five_last_second_sound=new Audio('music/5lastsecond.aac');
-var winSound= new Audio("music/Win.aac");
-var timesUpSound=new Audio("music/Time's up.aac");
-var winnerSound=new Audio('music/winner_sound.aac');
-var firthSound=new Audio('music/50-50.aac');
-const phoneAFriendSound=new Audio('music/Phone-A-Friend.aac')
-const askTheAudienceAudio=new Audio('music/Ask The Audience.aac')
-const pickExpertSound=new Audio('music/pick_expert.aac')
-const phoneExpertSound=new Audio('music/ask-pro.aac')
 let questionNumber=1;
 var winMoney;
 let correctAnswer;
@@ -23,7 +15,6 @@ var secondInterval;
 let paused_second;
 var serverRef = getDB.ref('server');
 const questionArray=[]
-const musicArray=[]
 const random_number_array=[]
 
 
@@ -48,14 +39,10 @@ if(currentUser){
     for(let i=0;i<12;i++){
         random_number_array.push(i)
     }
-    if(random_number_array.length==12 && letsPlayQuesSound && finalAnswerSound 
-        && quesSound && loseSound && five_last_second_sound && winSound
-        && timesUpSound && winnerSound && firthSound && phoneAFriendSound
-        && askTheAudienceAudio && askTheAudienceAudio && pickExpertSound
-        && phoneExpertSound){
+    if(random_number_array.length==12){
         random_number_array.sort(() => Math.random() - Math.random()).slice(0, 12)
-        loadQuestion(questionNumber)
     }
+        loadQuestion(questionNumber)
 })
 
 
@@ -85,7 +72,7 @@ if(second==5){
 }
 else if(second==0){
     clearInterval(secondInterval)
-    timesUpSound.play()
+    new Audio("music/Time's up.aac").play()
     setTimeout(()=>{
         if(questionNumber>=5){
             errorAlert('Đã hết thời gian, phần thưởng nhận được là '+winMoney,true,'failed')
@@ -288,6 +275,7 @@ $('.choice').click(function(){
     finalAnswerSound.onended=()=>{
     if(choiceId==correctAnswer){
        winMoney=$('.active.item.money').text().slice(4)
+        var winSound= new Audio("music/Win.aac");
         winSound.play()
         updateUser(questionNumber)
          $(this).css('background','#21ba45')
@@ -317,7 +305,7 @@ winSound.onplay=()=>{
                        progressAlert(text,true,'special_question')
                     }else if(questionNumber==12){
                        text+="Xin chúc mừng bạn đã chiến thắng chương trình, số tiền thưởng nhận được là "+winMoney+" "
-                      winnerSound.play()
+                      new Audio('music/winner_sound.aac').play()
                        progressAlert(text,true,'special_question_stop')
                     }else{
                         questionNumber+=1;
@@ -367,7 +355,11 @@ function updateUser(score){
 
  //NÚT TRỢ GIÚP 50/50
  $('.help:eq(0)').click(function(){
-    firthSound.play()
+    new Audio('music/50-50.aac').play()
+    //const audio = document.createElement('audio');
+
+    //audio.setAttribute('src','music/50-50.acc');
+    //audio.play()
     const arr=[]
     for(let i=0;i<4;i++){
         if($('.choice:eq('+i+')').data('id')!=correctAnswer){
@@ -383,6 +375,7 @@ function updateUser(score){
 
      //NÚT TRỢ GIÚP GỌI ĐIỆN NGƯỜI THÂN
     $('.help:eq(1)').click(function(){
+        const phoneAFriendSound=new Audio('music/Phone-A-Friend.aac')
         phoneAFriendSound.play()
         progressAlert('<h1 class="ui center aligned header"\
          style="color:white;background: rgb(33, 133, 208);">Đang gọi\
@@ -400,6 +393,7 @@ function updateUser(score){
         })
 
         $('.help:eq(2)').click(function(){
+            const askTheAudienceAudio=new Audio('music/Ask The Audience.aac')
             askTheAudienceAudio.play()
             progressAlert('<center><lord-icon\
             src="https://cdn.lordicon.com/gqdnbnwt.json" trigger="loop" delay="2000"\
@@ -447,6 +441,8 @@ function updateUser(score){
         
          //NÚT TRỢ GIÚP GỌI NHÀ THÔNG THÁI
     $('.help:eq(3)').click(function(){
+        const pickExpertSound=new Audio('music/pick_expert.aac')
+        const phoneExpertSound=new Audio('music/ask-pro.aac')
         pickExpertSound.play()
         const experts=[{name:'Ronaldo',image:'image/ronaldo.jpg'},
         {name:'Albert Einstein',image:'https://sohanews.sohacdn.com/160588918557773824/2022/1/16/albert-einstein-16423329346181127465252.jpg'},

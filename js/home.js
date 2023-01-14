@@ -3,11 +3,11 @@ var usersRef = getDB.ref('users');
 var questionsRef = getDB.ref('questions');
 const signOutBtn=document.getElementById('signOutBtn');
 const currentUser=JSON.parse(sessionStorage.getItem('user'))
-var letsPlayQuesSound= new Audio("music/Let's Play Question.mp3")
-var finalAnswerSound= new Audio("music/Final Answer.mp3")
-var quesSound= new Audio("music/background_sound.mp3")
-var loseSound=new Audio("music/Lose.mp3");
-var five_last_second_sound=new Audio('music/5lastsecond.mp3');
+var letsPlayQuesSound= new Audio("music/Let's Play Question.aac")
+var finalAnswerSound= new Audio("music/Final Answer.aac")
+var quesSound= new Audio("music/background_sound.aac")
+var loseSound=new Audio("music/Lose.aac");
+var five_last_second_sound=new Audio('music/5lastsecond.aac');
 let questionNumber=1;
 var winMoney;
 let correctAnswer;
@@ -16,6 +16,7 @@ let paused_second;
 var serverRef = getDB.ref('server');
 const questionArray=[]
 const random_number_array=[]
+
 
 /*getDB.ref("questions/"+"6").set({
     content:'Người khai sinh ra chữ quốc ngữ Việt Nam có quốc tịch ở đâu ?',
@@ -71,7 +72,7 @@ if(second==5){
 }
 else if(second==0){
     clearInterval(secondInterval)
-    new Audio("music/Time's up.mp3").play()
+    new Audio("music/Time's up.aac").play()
     setTimeout(()=>{
         if(questionNumber>=5){
             errorAlert('Đã hết thời gian, phần thưởng nhận được là '+winMoney,true,'failed')
@@ -131,7 +132,6 @@ function progressAlert(message,action,status_name){
         $('.ui.modal').append('<center style="padding:10px"><button class="ui continue green button">Tiếp tục</button></center>')
         $('.continue.button').click(function(){
                 $('.ui.modal').modal('hide')
-                //countDown(paused_second)
                 allComponents(true)
         })
 
@@ -158,6 +158,7 @@ function progressAlert(message,action,status_name){
         onHide :()=>{
             if(status_name=='normal_question'){
                 quesSound.play()
+                //countDown(paused_second)
             }
             else if(status_name=='special_question_stop'){
             location.href="index.html" 
@@ -274,7 +275,7 @@ $('.choice').click(function(){
     finalAnswerSound.onended=()=>{
     if(choiceId==correctAnswer){
        winMoney=$('.active.item.money').text().slice(4)
-        var winSound= new Audio("music/Win.mp3");
+        var winSound= new Audio("music/Win.aac");
         winSound.play()
         updateUser(questionNumber)
          $(this).css('background','#21ba45')
@@ -287,7 +288,7 @@ winSound.onplay=()=>{
             .animate({'font-size':'60px'},{
                 duration:300,
                 start:function(){
-                    allComponents(false)
+                    //allComponents(false)
                     //countDown(31)
                 },
                 complete:function(){
@@ -304,7 +305,7 @@ winSound.onplay=()=>{
                        progressAlert(text,true,'special_question')
                     }else if(questionNumber==12){
                        text+="Xin chúc mừng bạn đã chiến thắng chương trình, số tiền thưởng nhận được là "+winMoney+" "
-                      new Audio('music/winner_sound.mp3').play()
+                      new Audio('music/winner_sound.aac').play()
                        progressAlert(text,true,'special_question_stop')
                     }else{
                         questionNumber+=1;
@@ -320,7 +321,7 @@ winSound.onplay=()=>{
             loseSound.play()
             loseSound.onplay=()=>{
                  updateUser(0)
-            clearInterval(secondInterval)
+            //clearInterval(secondInterval)
              $(this).css('background','#db2828')
             }
 
@@ -354,7 +355,11 @@ function updateUser(score){
 
  //NÚT TRỢ GIÚP 50/50
  $('.help:eq(0)').click(function(){
-    new Audio('music/50-50.mp3').play()
+    new Audio('music/50-50.aac').play()
+    //const audio = document.createElement('audio');
+
+    //audio.setAttribute('src','music/50-50.acc');
+    //audio.play()
     const arr=[]
     for(let i=0;i<4;i++){
         if($('.choice:eq('+i+')').data('id')!=correctAnswer){
@@ -370,7 +375,7 @@ function updateUser(score){
 
      //NÚT TRỢ GIÚP GỌI ĐIỆN NGƯỜI THÂN
     $('.help:eq(1)').click(function(){
-        const phoneAFriendSound=new Audio('music/Phone-A-Friend.mp3')
+        const phoneAFriendSound=new Audio('music/Phone-A-Friend.aac')
         phoneAFriendSound.play()
         progressAlert('<h1 class="ui center aligned header"\
          style="color:white;background: rgb(33, 133, 208);">Đang gọi\
@@ -388,7 +393,7 @@ function updateUser(score){
         })
 
         $('.help:eq(2)').click(function(){
-            const askTheAudienceAudio=new Audio('music/Ask The Audience.mp3')
+            const askTheAudienceAudio=new Audio('music/Ask The Audience.aac')
             askTheAudienceAudio.play()
             progressAlert('<center><lord-icon\
             src="https://cdn.lordicon.com/gqdnbnwt.json" trigger="loop" delay="2000"\
@@ -436,8 +441,8 @@ function updateUser(score){
         
          //NÚT TRỢ GIÚP GỌI NHÀ THÔNG THÁI
     $('.help:eq(3)').click(function(){
-        const pickExpertSound=new Audio('music/pick_expert.mp3')
-        const phoneExpertSound=new Audio('music/ask-pro.mp3')
+        const pickExpertSound=new Audio('music/pick_expert.aac')
+        const phoneExpertSound=new Audio('music/ask-pro.aac')
         pickExpertSound.play()
         const experts=[{name:'Ronaldo',image:'image/ronaldo.jpg'},
         {name:'Albert Einstein',image:'https://sohanews.sohacdn.com/160588918557773824/2022/1/16/albert-einstein-16423329346181127465252.jpg'},

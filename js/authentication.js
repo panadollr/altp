@@ -30,7 +30,7 @@ loginForm.onsubmit=(event)=>{
             if(sn.exists()){
                 sucessLogin(sn.val())
             }else{
-                alert('Lỗi')
+                alert('Tên tài khoản sai')
             }
          })
 }
